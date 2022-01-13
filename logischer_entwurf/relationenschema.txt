@@ -1,0 +1,34 @@
+Document((PK)guid, a6z, document-url) 
+
+Type((PK)guid, (FK)specification, kv2, supplier, cost) 
+	type.specicifaction ◊ document.guid 
+
+Component((PK)serialNr, (FK)parent, (FK)type, MISSING, MISSING) 
+	component.parent ◊ component.serialNr 
+	component.type ◊ type.guid 
+
+IncidentReport((PK/FK)guid, k3, date, severity) 
+	IncidentReport.guid ◊ document.guid 
+
+Employee((PK)employeeId, name, email) 
+
+Incident((PK)guid, type, cost) 
+
+IsFiled((PK/FK)reportGuid, (PK/FK)employeeId, (PK/FK)incidentGuid) 
+	isFiled. reportGuid ◊ incidentReport.guid 
+	isFiled. employeeId ◊ employee.employeeId 
+	isFiled. incidentGuid ◊ incident.guid 
+
+Affects((PK/FK)componentGuid, (PK/FK)incidentGuid) 
+	affects.componentGuid ◊ component.guid 
+	affects.incidentGuid ◊ incident.guid 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
