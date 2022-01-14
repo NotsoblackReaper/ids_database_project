@@ -5,14 +5,28 @@ create table documents(
     primary key(guid)
 );
 
+CREATE SEQUENCE document_seq START WITH 1;
+
+CREATE OR REPLACE TRIGGER documents_guid_trg
+BEFORE INSERT ON documents
+FOR EACH ROW
+
+BEGIN
+  SELECT document_seq.NEXTVAL
+  INTO   :new.guid
+  FROM   dual;
+END;
+/
+
 create table types(
-    guid number(10,0) not null,
+    guid number GENERATED ALWAYS AS IDENTITY(START with 1 INCREMENT by 1),
     specification_id number(10,0) not null,
     kv2 char(12) null,
     supplier varchar(45) null,
     type_cost number(20,2) null,
     primary key(guid),
-    CONSTRAINT type_document_fk FOREIGN KEY (specification_id) REFERENCES documents (guid)
+    CONSTRAINT type_document_fk FOREIGN KEY (specification_id) REFERENCES documents (guid),
+    constraint type_cost_check check (type_cost >= 0)
 );
 
 create table components(
@@ -34,7 +48,7 @@ create table incidentReports(
 );
 
 create table employees(
-    employeeId number(10,0) not null,
+    employeeId number GENERATED ALWAYS AS IDENTITY(START with 1 INCREMENT by 1),
     name varchar(45) null,
     email varchar(45) null,
     primary key(employeeId)
