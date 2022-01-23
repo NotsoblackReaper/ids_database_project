@@ -8,6 +8,27 @@ import java.sql.*;
 
 public class Main {
 
+    public static void clearData(Connection con,boolean[]skips) throws SQLException {
+        System.out.println("Clearing Data");
+        Statement stmt=con.createStatement();
+        if(!skips[0]){
+            stmt.execute("delete * from documents");
+             System.out.println("\tCleared documents");
+        }else
+            System.out.println("\tSkipped documents");
+        if(!skips[1]){
+            stmt.execute("delete * from employees");
+            System.out.println("\tCleared employees");
+        }else
+            System.out.println("\tSkipped employees");
+        if(!skips[2]){
+            stmt.execute("delete * from types");
+            System.out.println("\tCleared types");
+        }else
+            System.out.println("\tSkipped types");
+        con.commit();
+    }
+
     public static void generateData(Connection con,boolean[]skips, int n) throws IOException {
         System.out.println("Generating Data");
         if(!skips[0]){
@@ -31,7 +52,7 @@ public class Main {
         System.out.println("Inserting data:");
         int res=0;
         if(!skips[0]){
-            res=SimpleInserts.SimpleInsert("src/main/resources/data/Documents.csv","documents",2, new String[]{"a6z", "document_url"},null,con);
+            res=SimpleInserts.SimpleInsert("src/main/resources/data/Documents.csv","documents",2, new String[]{"az6", "document_url"},null,con);
             System.out.println("\tInserted "+res+" rows into documents");
         }else
             System.out.println("\tSkipped documents");
@@ -55,13 +76,14 @@ public class Main {
              String dburl = "jdbc:oracle:thin:@oracle-lab.cs.univie.ac.at:1521:lab";
             Connection con = DriverManager.getConnection(dburl, "a11739260", "dbs21");
             con.setAutoCommit(false);
-
+            con.commit();
+            clearData(con,new boolean[]{false,false,false});
             //Generate and insert Documents and Employees
-            generateData(con, new boolean[]{false, false, true},10000);
+            generateData(con, new boolean[]{false, false, true},5000);
             insertData(con,new boolean[]{false, false,true});
 
             //Generate and insert Types, dependant on documents
-            generateData(con, new boolean[]{true, true, false},10000);
+            generateData(con, new boolean[]{true, true, false},5000);
             insertData(con,new boolean[]{true, true,false});
             /*
             Statement stmt = con.createStatement();

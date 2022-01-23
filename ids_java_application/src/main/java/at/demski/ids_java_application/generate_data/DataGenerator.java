@@ -84,15 +84,15 @@ public class DataGenerator {
         if(output.exists())output.delete();
         output.createNewFile();
         StringBuilder sb=new StringBuilder();
-        sb.append("a6z;document_url").append(System.lineSeparator());
+        sb.append("az6;document_url").append(System.lineSeparator());
 
         for(int cat=0;cat<3;cat++){
             for(int i=0;i<amount;i++){
-                String a6z="A6Z"+cat;
+                String az6="AZ6"+cat;
                 String number=String.valueOf(i);
                 String numberstring="00000000";
-                a6z+=numberstring.substring(0,numberstring.length()-number.length())+number;
-                sb.append(a6z).append(";SAP/documents/").append(a6z).append(System.lineSeparator());
+                az6+=numberstring.substring(0,numberstring.length()-number.length())+number;
+                sb.append(az6).append(";SAP/documents/").append(az6).append(System.lineSeparator());
             }
         }
 
@@ -114,7 +114,7 @@ public class DataGenerator {
         StringBuilder sb=new StringBuilder();
         try {
             Statement stmt=con.createStatement();
-            ResultSet rs=stmt.executeQuery("select * from documents  where a6z like 'A6Z1%'");
+            ResultSet rs=stmt.executeQuery("select * from documents  where az6 like 'AZ61%'");
 
             sb.append("specification_id;kv2;supplier;type_cost").append(System.lineSeparator());
                 for(int i=0;i<amount;i++){
@@ -131,7 +131,12 @@ public class DataGenerator {
                     float cost=0;
                     cost+=100*rnd.nextInt(5);
                     cost+=50*rnd.nextInt(2);
+                    cost+=25*rnd.nextInt(2);
                     cost+=0.99f*rnd.nextInt(2);
+                    if(cost==0){
+                        cost=100;
+                        cost+=100*rnd.nextInt(5);
+                    }
                     sb.append(cost).append(System.lineSeparator());
                 }
 

@@ -1,10 +1,10 @@
 <?php
 
 //include DatabaseHelper.php file
-require_once('DocumentsDatabaseHelper.php');
+require_once('../DatabaseHelpers/DocumentsDatabaseHelper.php');
 
 //instantiate DatabaseHelper class
-$database = new TypesDatabaseHelper();
+$database = new DocumentsDatabaseHelper();
 
 //Grab variable id from POST request
 $guid='';

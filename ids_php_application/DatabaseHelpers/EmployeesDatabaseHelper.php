@@ -1,6 +1,6 @@
 <?php
 
-class TypesDatabaseHelper
+class EmployeesDatabaseHelper
 {
     // Since the connection details are constant, define them as const
     // We can refer to constants like e.g. DatabaseHelper::username
@@ -18,9 +18,9 @@ class TypesDatabaseHelper
         try {
             // Create connection with the command oci_connect(String(username), String(password), String(connection_string))
             $this->conn = oci_connect(
-                TypesDatabaseHelper::username,
-                TypesDatabaseHelper::password,
-                TypesDatabaseHelper::con_string
+                EmployeesDatabaseHelper::username,
+                EmployeesDatabaseHelper::password,
+                EmployeesDatabaseHelper::con_string
             );
 
             //check if the connection object is != null
@@ -40,14 +40,12 @@ class TypesDatabaseHelper
         oci_close($this->conn);
     }
 
-    public function selectAllTypes($guid, $spec_id, $kv2, $supplier, $type_cost)
+    public function selectAllEmployees($employee_id, $name, $email)
     {
-        $sql = "SELECT * FROM types
-            WHERE guid LIKE '%{$guid}%'
-              AND specification_id LIKE '%{$spec_id}%'
-              AND upper(kv2) LIKE upper('%{$kv2}%')
-              AND upper(supplier) LIKE upper('%{$supplier}%')
-              AND type_cost LIKE '%{$type_cost}%'";
+        $sql = "SELECT * FROM employees
+            WHERE employeeid LIKE '%{$employee_id}%'
+              AND upper(name) LIKE upper('%{$name}%')
+              AND upper(email) LIKE upper('%{$email}%')";
 
         $statement = oci_parse($this->conn, $sql);
 

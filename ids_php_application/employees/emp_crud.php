@@ -1,10 +1,10 @@
 <?php
 
 // Include DatabaseHelper.php file
-require_once('EmployeesDatabaseHelper.php');
+require_once('../DatabaseHelpers/EmployeesDatabaseHelper.php');
 
 // Instantiate DatabaseHelper class
-$database = new TypesDatabaseHelper();
+$database = new EmployeesDatabaseHelper();
 
 $employee_id='';
 if (isset($_GET['employee_id'])) {

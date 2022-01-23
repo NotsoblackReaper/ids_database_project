@@ -1,16 +1,16 @@
 <?php
 
 //include DatabaseHelper.php file
-require_once('DocumentsDatabaseHelper.php');
+require_once('../DatabaseHelpers/DocumentsDatabaseHelper.php');
 
 //instantiate DatabaseHelper class
-$database = new TypesDatabaseHelper();
+$database = new DocumentsDatabaseHelper();
 
 //Grab variables from POST request
 
-$a6z='';
-if (isset($_POST['a6z'])) {
-    $a6z = $_POST['a6z'];
+$az6='';
+if (isset($_POST['az6'])) {
+    $az6 = $_POST['az6'];
 }
 
 $document_url='';
@@ -19,14 +19,14 @@ if (isset($_POST['document_url'])) {
 }
 
 // Insert method
-$success = $database->insertIntoDocuments($a6z, $document_url);
+$success = $database->insertIntoDocuments($az6, $document_url);
 
 // Check result
 if ($success){
-    echo "Person '{$a6z} {$document_url}' successfully added!'";
+    echo "Person '{$az6} {$document_url}' successfully added!'";
 }
 else{
-    echo "Error can't insert Person '{$a6z} {$document_url}'!";
+    echo "Error can't insert Person '{$az6} {$document_url}'!";
 }
 ?>
 

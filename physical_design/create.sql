@@ -1,6 +1,6 @@
 create table documents(
     guid number(10,0) not null,
-    a6z char(12) null,
+    az6 char(12) null,
     document_url varchar(45) null,
     primary key(guid)
 );
