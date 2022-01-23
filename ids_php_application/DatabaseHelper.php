@@ -1,4 +1,5 @@
 <?php
+
 class DatabaseHelper
 {
     // Since the connection details are constant, define them as const
@@ -41,14 +42,14 @@ class DatabaseHelper
 
     // This function creates and executes a SQL select statement and returns an array as the result
     // 2-dimensional array: the result array contains nested arrays (each contains the data of a single row)
-    public function selectAllEmployees($employeeId, $name, $email)
+    public function selectAllPersons($person_id, $surname, $name)
     {
         // Define the sql statement string
         // Notice that the parameters $person_id, $surname, $name in the 'WHERE' clause
-        $sql = "SELECT * FROM EMPLOYEES
-            WHERE EMPLOYEEID LIKE '%{$employeeId}%'
-              AND upper(NAME) LIKE upper('%{$name}%')
-              AND upper(EMAIL) LIKE upper('%{$email}%')";
+        $sql = "SELECT * FROM person
+            WHERE person_id LIKE '%{$person_id}%'
+              AND upper(surname) LIKE upper('%{$surname}%')
+              AND upper(name) LIKE upper('%{$name}%')";
 
         // oci_parse(...) prepares the Oracle statement for execution
         // notice the reference to the class variable $this->conn (set in the constructor)
@@ -74,10 +75,38 @@ class DatabaseHelper
         return $res;
     }
 
+    public function selectAllDocuments($guid, $a6z, $document_url)
+    {
+        $sql = "SELECT * FROM documents
+            WHERE guid LIKE '%{$guid}%'
+              AND upper(a6z) LIKE upper('%{$a6z}%')
+              AND upper(document_url) LIKE upper('%{$document_url}%')";
+
+        $statement = oci_parse($this->conn, $sql);
+
+        oci_execute($statement);
+
+        oci_fetch_all($statement, $res, null, null, OCI_FETCHSTATEMENT_BY_ROW);
+
+        oci_free_statement($statement);
+
+        return $res;
+    }
+
     // This function creates and executes a SQL insert statement and returns true or false
     public function insertIntoPerson($name, $surname)
     {
         $sql = "INSERT INTO PERSON (NAME, SURNAME) VALUES ('{$name}', '{$surname}')";
+
+        $statement = oci_parse($this->conn, $sql);
+        $success = oci_execute($statement) && oci_commit($this->conn);
+        oci_free_statement($statement);
+        return $success;
+    }
+
+    public function insertIntoDocuments($a6z, $document_url)
+    {
+        $sql = "INSERT INTO DOCUMENTS (A6Z, DOCUMENT_URL) VALUES ('{$a6z}', '{$document_url}')";
 
         $statement = oci_parse($this->conn, $sql);
         $success = oci_execute($statement) && oci_commit($this->conn);
@@ -109,6 +138,27 @@ class DatabaseHelper
         oci_execute($statement);
 
         //Note: Since we execute COMMIT in our procedure, we don't need to commit it here.
+        //@oci_commit($statement); //not necessary
+
+        //Clean Up
+        oci_free_statement($statement);
+
+        //$errorcode == 1 => success
+        //$errorcode != 1 => Oracle SQL related errorcode;
+        return $errorcode;
+    }
+
+    public function deleteDocument($guid)
+    {
+        $errorcode = 0;
+        $sql = 'BEGIN P_DELETE_DOCUMENT(:documentguid, :errorcode); END;';
+        $statement = oci_parse($this->conn, $sql);
+
+        //  Bind the parameters
+        oci_bind_by_name($statement, ':documentguid', $guid);
+        oci_bind_by_name($statement, ':errorcode', $errorcode);
+        oci_execute($statement);
+
         //@oci_commit($statement); //not necessary
 
         //Clean Up
