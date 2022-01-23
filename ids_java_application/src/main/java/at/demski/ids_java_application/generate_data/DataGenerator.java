@@ -1,6 +1,13 @@
 package at.demski.ids_java_application.generate_data;
 
+import com.sun.source.tree.StatementTree;
+
+import javax.swing.plaf.nimbus.State;
 import java.io.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.*;
 
 public class DataGenerator {
@@ -79,7 +86,6 @@ public class DataGenerator {
         StringBuilder sb=new StringBuilder();
         sb.append("a6z;document_url").append(System.lineSeparator());
 
-        long count=0;
         for(int cat=0;cat<3;cat++){
             for(int i=0;i<amount;i++){
                 String a6z="A6Z"+cat;
@@ -96,24 +102,43 @@ public class DataGenerator {
         fw.close();
     }
 
-    public static void generateTypes(String out_dir,String out_name,long amount) throws IOException {
+    public static void generateTypes(String out_dir, String out_name, long amount, Connection con) throws IOException {
         String out_file=out_dir+out_name+".csv";
-
+        String[]supppliers={"GXO Logistics","DHL Supply Chain", "Americold", "Ryder Supply Chain Solutions","EODIS North America",
+                "FedEx Supply Chain", "Lineage Logistics","Kenco Logistic Services LLC"};
         File output=new File(out_file);
         if(output.exists())output.delete();
         output.createNewFile();
-        StringBuilder sb=new StringBuilder();
-        sb.append("a6z;document_url").append(System.lineSeparator());
 
-        long count=0;
-        for(int cat=0;cat<3;cat++){
-            for(int i=0;i<amount;i++){
-                String a6z="A6Z"+cat;
-                String number=String.valueOf(i);
-                String numberstring="00000000";
-                a6z+=numberstring.substring(0,numberstring.length()-number.length())+number;
-                sb.append(a6z).append(";SAP/documents/").append(a6z).append(System.lineSeparator());
-            }
+        Random rnd=new Random();
+        StringBuilder sb=new StringBuilder();
+        try {
+            Statement stmt=con.createStatement();
+            ResultSet rs=stmt.executeQuery("select * from documents  where a6z like 'A6Z1%'");
+
+            sb.append("specification_id;kv2;supplier;type_cost").append(System.lineSeparator());
+                for(int i=0;i<amount;i++){
+                    if(!rs.next())
+                        break;
+                    long spec_id=rs.getLong("guid");
+                    sb.append(spec_id).append(';');
+                    String kv2="KV2000000000";
+                    String number=String.valueOf(i+1);
+                    kv2=kv2.substring(0,kv2.length()-number.length())+number;
+                    sb.append(kv2).append(';');
+                    String supplier=supppliers[rnd.nextInt(supppliers.length)];
+                    sb.append(supplier).append(';');
+                    float cost=0;
+                    cost+=100*rnd.nextInt(5);
+                    cost+=50*rnd.nextInt(2);
+                    cost+=0.99f*rnd.nextInt(2);
+                    sb.append(cost).append(System.lineSeparator());
+                }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
         FileWriter fw=new FileWriter(out_file);

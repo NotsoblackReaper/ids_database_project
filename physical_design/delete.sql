@@ -5,4 +5,6 @@ drop table Employees;
 drop table incidentReports;
 drop table components;
 drop table types;
+drop trigger documents_guid_trg;
+drop sequence document_seq;
 drop table documents;

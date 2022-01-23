@@ -9,15 +9,26 @@ import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
+import static java.sql.Statement.EXECUTE_FAILED;
+
 public class SimpleInserts {
-    public static void SimpleInsert2Vals(String file,String table,String var1,String var2, Connection c) throws IOException, SQLException {
+    public static int SimpleInsert(String file,String table,int vals,String []vars,int[]var_types, Connection c) throws IOException, SQLException {
         FileInputStream iStream = null;
         Scanner sc = null;
+        int sum=0;
         try {
             iStream = new FileInputStream(file);
             sc = new Scanner(iStream, "UTF-8");
 
-            String statement="insert into "+table+"("+var1+", "+var2+") values (?,?)";
+            String statement="insert into "+table+"("+vars[0];
+            for(int i=1;i<vals;++i)
+                statement+=","+vars[i];
+
+            statement+=") values (?";
+            for(int i=1;i<vals;++i)
+                statement+=",?";
+            statement+=")";
+
 
             String[] header=sc.nextLine().split(";");
 
@@ -27,13 +38,23 @@ public class SimpleInserts {
             while(sc.hasNextLine()){
                 ps.clearParameters();
                 String[] values=sc.nextLine().split(";");
-                ps.setString(1,values[0]);
-                ps.setString(2,values[1]);
+                for(int i=0;i<vals;++i)
+                    if(var_types==null||var_types[i]==0)
+                    ps.setString(i+1,values[i]);
+                    else if(var_types[i]==1)
+                        ps.setLong(i+1,Long.parseLong(values[i]));
+                    else if(var_types[i]==2)
+                        ps.setFloat(i+1,Float.parseFloat(values[i]));
                 ps.addBatch();
             }
             ps.clearParameters();
             int[]result=ps.executeBatch();
 
+            for(int i:result){
+                sum+=i;
+                if(i==EXECUTE_FAILED)
+                    System.out.println("Insert Error");
+            }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } finally {
@@ -41,6 +62,7 @@ public class SimpleInserts {
                 iStream.close();
             if (sc != null)
                 sc.close();
+            return sum;
         }
     }
 }
