@@ -1,13 +1,10 @@
 <?php
 
 //include DatabaseHelper.php file
-require_once('EmployeesDatabaseHelper.php');
-
-//instantiate DatabaseHelper class
+require_once('TypesDatabaseHelper.php');
 $database = new TypesDatabaseHelper();
 
 //Grab variables from POST request
-
 $name='';
 if (isset($_POST['name'])) {
     $name = $_POST['name'];

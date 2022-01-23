@@ -4,7 +4,7 @@
 require_once('DocumentsDatabaseHelper.php');
 
 //instantiate DatabaseHelper class
-$database = new EmployeesDatabaseHelper();
+$database = new TypesDatabaseHelper();
 
 //Grab variable id from POST request
 $guid='';

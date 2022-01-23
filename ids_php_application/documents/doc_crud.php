@@ -31,11 +31,12 @@ $document_array = $database->selectAllDocuments($guid, $a6z, $document_url);
     <link rel="stylesheet" href="../static/styles/menu-bar.css"/>
 </head>
 
-<body>
+<body style="margin-top: 0px">
 <ul id="menu-bar">
     <li><a href="../index.php">Home</a></li>
     <li><a class="active" href="../documents/doc_crud.php">Documents</a></li>
     <li><a href="../employees/emp_crud.php">Employees</a></li>
+    <li><a href="../types/typ_crud.php">Types</a></li>
 </ul>
 <h1>Documents</h1>
 

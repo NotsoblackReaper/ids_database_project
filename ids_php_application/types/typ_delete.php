@@ -1,9 +1,7 @@
 <?php
 
 //include DatabaseHelper.php file
-require_once('EmployeesDatabaseHelper.php');
-
-//instantiate DatabaseHelper class
+require_once('TypesDatabaseHelper.php');
 $database = new TypesDatabaseHelper();
 
 //Grab variable id from POST request

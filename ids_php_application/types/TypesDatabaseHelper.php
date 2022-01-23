@@ -1,6 +1,6 @@
 <?php
 
-class DocumentsDatabaseHelper
+class TypesDatabaseHelper
 {
     // Since the connection details are constant, define them as const
     // We can refer to constants like e.g. DatabaseHelper::username
@@ -40,12 +40,14 @@ class DocumentsDatabaseHelper
         oci_close($this->conn);
     }
 
-    public function selectAllDocuments($guid, $a6z, $document_url)
+    public function selectAllTypes($guid, $spec_id, $kv2, $supplier, $type_cost)
     {
-        $sql = "SELECT * FROM documents
+        $sql = "SELECT * FROM types
             WHERE guid LIKE '%{$guid}%'
-              AND upper(a6z) LIKE upper('%{$a6z}%')
-              AND upper(document_url) LIKE upper('%{$document_url}%')";
+              AND specification_id LIKE '%{$spec_id}%'
+              AND upper(kv2) LIKE upper('%{$kv2}%')
+              AND upper(supplier) LIKE upper('%{$supplier}%')
+              AND type_cost LIKE '%{$type_cost}%'";
 
         $statement = oci_parse($this->conn, $sql);
 
@@ -58,9 +60,9 @@ class DocumentsDatabaseHelper
         return $res;
     }
 
-    public function insertIntoDocuments($a6z, $document_url)
+    public function insertIntoEmployees($name, $email)
     {
-        $sql = "INSERT INTO DOCUMENTS (A6Z, DOCUMENT_URL) VALUES ('{$a6z}', '{$document_url}')";
+        $sql = "INSERT INTO EMPLOYEES (NAME, EMAIL) VALUES ('{$name}', '{$email}')";
 
         $statement = oci_parse($this->conn, $sql);
         $success = oci_execute($statement) && oci_commit($this->conn);
@@ -68,14 +70,14 @@ class DocumentsDatabaseHelper
         return $success;
     }
 
-    public function deleteDocument($guid)
+    public function deleteEmployee($employee_id)
     {
         $errorcode = 0;
-        $sql = 'BEGIN P_DELETE_DOCUMENT(:documentguid, :errorcode); END;';
+        $sql = 'BEGIN p_delete_employee(:employeeid, :errorcode); END;';
         $statement = oci_parse($this->conn, $sql);
 
         //  Bind the parameters
-        oci_bind_by_name($statement, ':documentguid', $guid);
+        oci_bind_by_name($statement, ':employeeid', $employee_id);
         oci_bind_by_name($statement, ':errorcode', $errorcode);
         oci_execute($statement);
 

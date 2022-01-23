@@ -18,9 +18,9 @@ class EmployeesDatabaseHelper
         try {
             // Create connection with the command oci_connect(String(username), String(password), String(connection_string))
             $this->conn = oci_connect(
-                EmployeesDatabaseHelper::username,
-                EmployeesDatabaseHelper::password,
-                EmployeesDatabaseHelper::con_string
+                TypesDatabaseHelper::username,
+                TypesDatabaseHelper::password,
+                TypesDatabaseHelper::con_string
             );
 
             //check if the connection object is != null
@@ -58,9 +58,9 @@ class EmployeesDatabaseHelper
         return $res;
     }
 
-    public function insertIntoDocuments($a6z, $document_url)
+    public function insertIntoEmployees($name, $email)
     {
-        $sql = "INSERT INTO DOCUMENTS (A6Z, DOCUMENT_URL) VALUES ('{$a6z}', '{$document_url}')";
+        $sql = "INSERT INTO EMPLOYEES (NAME, EMAIL) VALUES ('{$name}', '{$email}')";
 
         $statement = oci_parse($this->conn, $sql);
         $success = oci_execute($statement) && oci_commit($this->conn);
@@ -68,14 +68,14 @@ class EmployeesDatabaseHelper
         return $success;
     }
 
-    public function deleteDocument($guid)
+    public function deleteEmployee($employee_id)
     {
         $errorcode = 0;
-        $sql = 'BEGIN P_DELETE_DOCUMENT(:documentguid, :errorcode); END;';
+        $sql = 'BEGIN p_delete_employee(:employeeid, :errorcode); END;';
         $statement = oci_parse($this->conn, $sql);
 
         //  Bind the parameters
-        oci_bind_by_name($statement, ':documentguid', $guid);
+        oci_bind_by_name($statement, ':employeeid', $employee_id);
         oci_bind_by_name($statement, ':errorcode', $errorcode);
         oci_execute($statement);
 

@@ -4,7 +4,7 @@
 require_once('EmployeesDatabaseHelper.php');
 
 // Instantiate DatabaseHelper class
-$database = new EmployeesDatabaseHelper();
+$database = new TypesDatabaseHelper();
 
 $employee_id='';
 if (isset($_GET['employee_id'])) {
@@ -31,11 +31,12 @@ $employee_array = $database->selectAllEmployees($employee_id, $name, $email);
     <link rel="stylesheet" href="../static/styles/menu-bar.css"/>
 </head>
 
-<body>
+<body style="margin-top: 0px">
 <ul id="menu-bar">
     <li><a href="../index.php">Home</a></li>
     <li><a href="../documents/doc_crud.php">Documents</a></li>
     <li><a class="active" href="../employees/emp_crud.php">Employees</a></li>
+    <li><a href="../types/typ_crud.php">Types</a></li>
 </ul>
 <h1>Employees</h1>
 
@@ -46,22 +47,22 @@ $employee_array = $database->selectAllEmployees($employee_id, $name, $email);
 
     <!-- Name textbox -->
     <div>
-        <label for="new_name">A6Z:</label>
-        <input id="new_name" name="a6z" type="text" maxlength="20">
+        <label for="new_name">Name:</label>
+        <input id="new_name" name="name" type="text" maxlength="20">
     </div>
     <br>
 
     <!-- Surname textbox -->
     <div>
-        <label for="new_surname">Document URL:</label>
-        <input id="new_surname" name="document_url" type="text" maxlength="20">
+        <label for="new_email">Email:</label>
+        <input id="new_email" name="email" type="text" maxlength="40">
     </div>
     <br>
 
     <!-- Submit button -->
     <div>
         <button type="submit">
-            Add Document
+            Add Employee
         </button>
     </div>
 </form>
@@ -74,14 +75,14 @@ $employee_array = $database->selectAllEmployees($employee_id, $name, $email);
     <!-- ID textbox -->
     <div>
         <label for="emp_guid">ID:</label>
-        <input id="emp_guid" name="id" type="number" min="0">
+        <input id="emp_guid" name="empid" type="number" min="0">
     </div>
     <br>
 
     <!-- Submit button -->
     <div>
         <button type="submit">
-            Delete Document
+            Delete Employee
         </button>
     </div>
 </form>
