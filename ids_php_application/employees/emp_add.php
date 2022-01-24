@@ -8,9 +8,14 @@ $database = new EmployeesDatabaseHelper();
 
 //Grab variables from POST request
 
-$name='';
-if (isset($_POST['name'])) {
-    $name = $_POST['name'];
+$firstname='';
+if (isset($_GET['firstname'])) {
+    $firstname = $_GET['firstname'];
+}
+
+$surname='';
+if (isset($_GET['surname'])) {
+    $surname = $_GET['surname'];
 }
 
 $email='';
@@ -19,14 +24,16 @@ if (isset($_POST['email'])) {
 }
 
 // Insert method
-$success = $database->insertIntoEmployees($name, $email);
-
+if($firstname!=''&&$surname!=''&&$email!='')
+$success = $database->insertIntoEmployees($firstname,$surname, $email);
+else
+    $success=false;
 // Check result
 if ($success){
-    echo "Employee '{$name} {$email}' successfully added!'";
+    echo "Employee '{$firstname} {$surname} {$email}' successfully added!'";
 }
 else{
-    echo "Error can't insert Employee '{$name} {$email}'!";
+    echo "Error can't insert Employee '{$surname} {$surname} {$email}'!";
 }
 ?>
 

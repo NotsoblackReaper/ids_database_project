@@ -42,10 +42,11 @@ class DocumentsDatabaseHelper
 
     public function selectAllDocuments($guid, $az6, $document_url)
     {
-        $sql = "SELECT * FROM documents
-            WHERE guid LIKE '%{$guid}%'
-              AND upper(az6) LIKE upper('%{$az6}%')
-              AND upper(document_url) LIKE upper('%{$document_url}%')";
+        $sql = "SELECT documents.guid,documents.az6,documents.document_url,types.guid as typeid from documents 
+            left join types on documents.guid=types.specification_id
+            WHERE documents.guid LIKE '%{$guid}%'
+              AND upper(documents.az6) LIKE upper('%{$az6}%')
+              AND upper(documents.document_url) LIKE upper('%{$document_url}%')";
 
         $statement = oci_parse($this->conn, $sql);
 

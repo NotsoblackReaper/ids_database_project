@@ -20,7 +20,7 @@ public class DataGenerator {
         if(output.exists())output.delete();
         output.createNewFile();
         StringBuilder sb=new StringBuilder();
-        sb.append("name;email").append(System.lineSeparator());
+        sb.append("firstname;surname;email").append(System.lineSeparator());
 
         FileInputStream iStreamFNames = null;
         FileInputStream iStreamSNames = null;
@@ -51,7 +51,7 @@ public class DataGenerator {
                     String fname=fName_list.get(fNameIndex);
                     String sname=sName_list.get(sNameIndex);
                     sname=sname.substring(0, 1).toUpperCase() + sname.substring(1).toLowerCase();
-                    sb.append(fname).append(" ").append(sname).append(';').append(fname).append('.').append(sname).append("@company.at").append(System.lineSeparator());
+                    sb.append(fname).append(";").append(sname).append(';').append(fname).append('.').append(sname).append("@company.at").append(System.lineSeparator());
                     ++i;
                     if(rand.nextFloat()<0.8f)
                     fName_list.remove(fNameIndex);

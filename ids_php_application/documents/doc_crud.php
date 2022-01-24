@@ -29,9 +29,10 @@ $document_array = $database->selectAllDocuments($guid, $az6, $document_url);
 <head>
     <title>Documents</title>
     <link rel="stylesheet" href="../static/styles/menu-bar.css"/>
+    <link rel="stylesheet" href="../static/styles/forms.css"/>
 </head>
 
-<body style="margin-top: 0px">
+<body style="margin-top: 0px;padding-left: 10px;padding-right: 10px;">
 <ul id="menu-bar">
     <li><a href="../index.php">Home</a></li>
     <li><a class="active" href="../documents/doc_crud.php">Documents</a></li>
@@ -44,22 +45,16 @@ $document_array = $database->selectAllDocuments($guid, $az6, $document_url);
 <h2>Add Document: </h2>
 <form method="post" action="doc_add.php">
     <div>
-        <label for="new_az6">AZ6:</label>
+        <label for="new_az6" class="label">AZ6:</label>
         <input id="new_az6" name="az6" type="text" maxlength="20">
     </div>
-    <br>
-
-    <!-- Surname textbox -->
     <div>
-        <label for="new_surname">Document URL:</label>
+        <label for="new_surname" class="label">Document URL:</label>
         <input id="new_surname" name="document_url" type="text" maxlength="20">
     </div>
-    <br>
-
-    <!-- Submit button -->
     <div>
-        <button type="submit">
-            Add Document
+        <button type="submit" class="button-submit">
+            Add
         </button>
     </div>
 </form>
@@ -71,15 +66,12 @@ $document_array = $database->selectAllDocuments($guid, $az6, $document_url);
 <form method="post" action="doc_delete.php">
     <!-- ID textbox -->
     <div>
-        <label for="doc_guid">ID:</label>
+        <label for="doc_guid" class="label">ID:</label>
         <input id="doc_guid" name="id" type="number" min="0">
     </div>
-    <br>
-
-    <!-- Submit button -->
     <div>
-        <button type="submit">
-            Delete Document
+        <button type="submit" class="button-submit">
+            Delete
         </button>
     </div>
 </form>
@@ -91,30 +83,21 @@ $document_array = $database->selectAllDocuments($guid, $az6, $document_url);
 <form method="get">
     <!-- GUID textbox:-->
     <div>
-        <label for="guid_inp">GUID:</label>
+        <label for="guid_inp" class="label">GUID:</label>
         <input id="guid_inp" name="guid" type="number" value='<?php echo $guid; ?>' min="0">
     </div>
-    <br>
-
-    <!-- az6 textbox:-->
     <div>
-        <label for="az6_inp">AZ6:</label>
+        <label for="az6_inp"  class="label">AZ6:</label>
         <input id="_inp" name="az6" type="text" class="form-control input-md" value='<?php echo $az6; ?>'
                maxlength="12">
     </div>
-    <br>
-
-    <!-- Surname textbox:-->
     <div>
-        <label for="document_url_inp">Document URL:</label>
+        <label for="document_url_inp" class="label">Document URL:</label>
         <input id="document_url_inp" name="document_url" type="text"
                value='<?php echo $document_url; ?>' maxlength="40">
     </div>
-    <br>
-
-    <!-- Submit button -->
     <div>
-        <button id='submit' type='submit'>
+        <button id='submit' type='submit' class="button-submit">
             Search
         </button>
     </div>
@@ -129,12 +112,20 @@ $document_array = $database->selectAllDocuments($guid, $az6, $document_url);
         <th>GUID</th>
         <th>AZ6</th>
         <th>Document URL</th>
+        <th>Delete</th>
     </tr>
     <?php foreach ($document_array as $document) : ?>
         <tr>
             <td><?php echo $document['GUID']; ?>  </td>
             <td><?php echo $document['AZ6']; ?>  </td>
             <td><?php echo $document['DOCUMENT_URL']; ?>  </td>
+            <td><form method="post" action="doc_delete.php">
+                    <input name="id" type="hidden" value="<?php echo $document['GUID']; ?>">
+                    <button id="button-list" type="submit" <?php if ($document['TYPEID'] != ''){ ?> disabled <?php   } ?>>
+                        <img src="../static/imgs/trashcan.png" alt="Del" width="20">
+                    </button>
+                </form>
+            </td>
         </tr>
     <?php endforeach; ?>
 </table>

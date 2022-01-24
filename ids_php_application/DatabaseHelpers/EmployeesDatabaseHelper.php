@@ -40,11 +40,12 @@ class EmployeesDatabaseHelper
         oci_close($this->conn);
     }
 
-    public function selectAllEmployees($employee_id, $name, $email)
+    public function selectAllEmployees($employee_id,  $firstname,$surname, $email)
     {
         $sql = "SELECT * FROM employees
             WHERE employeeid LIKE '%{$employee_id}%'
-              AND upper(name) LIKE upper('%{$name}%')
+              AND upper(firstname) LIKE upper('%{$firstname}%')
+              AND upper(surname) LIKE upper('%{$surname}%')
               AND upper(email) LIKE upper('%{$email}%')";
 
         $statement = oci_parse($this->conn, $sql);
@@ -58,9 +59,9 @@ class EmployeesDatabaseHelper
         return $res;
     }
 
-    public function insertIntoEmployees($name, $email)
+    public function insertIntoEmployees($firstname,$surname, $email)
     {
-        $sql = "INSERT INTO EMPLOYEES (NAME, EMAIL) VALUES ('{$name}', '{$email}')";
+        $sql = "INSERT INTO EMPLOYEES (FIRSTNAME,SURNAME, EMAIL) VALUES ('{$firstname}','{$surname}', '{$email}')";
 
         $statement = oci_parse($this->conn, $sql);
         $success = oci_execute($statement) && oci_commit($this->conn);

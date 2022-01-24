@@ -57,7 +57,7 @@ public class Main {
         }else
             System.out.println("\tSkipped documents");
         if(!skips[1]){
-            res=SimpleInserts.SimpleInsert("src/main/resources/data/Employees.csv","employees",2, new String[]{"name", "email"},null,con);
+            res=SimpleInserts.SimpleInsert("src/main/resources/data/Employees.csv","employees",3, new String[]{"firstname","surname", "email"},null,con);
             System.out.println("\tInserted "+res+" rows into employees");
         }else
             System.out.println("\tSkipped employees");
@@ -77,7 +77,7 @@ public class Main {
             Connection con = DriverManager.getConnection(dburl, "a11739260", "dbs21");
             con.setAutoCommit(false);
             con.commit();
-            clearData(con,new boolean[]{false,false,false});
+            //clearData(con,new boolean[]{false,false,false});
             //Generate and insert Documents and Employees
             generateData(con, new boolean[]{false, false, true},5000);
             insertData(con,new boolean[]{false, false,true});

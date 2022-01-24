@@ -44,13 +44,14 @@ $doc_array = $doc_database->selectUnusedSpec();
 <head>
     <title>Types</title>
     <link rel="stylesheet" href="../static/styles/menu-bar.css"/>
+    <link rel="stylesheet" href="../static/styles/forms.css"/>
 </head>
 
-<body style="margin-top: 0px">
+<body style="margin-top: 0px;padding-left: 10px;padding-right: 10px;">
 <ul id="menu-bar">
     <li><a href="../index.php">Home</a></li>
     <li><a href="../documents/doc_crud.php">Documents</a></li>
-    <li><a href="../types/emp_crud.php">Employees</a></li>
+    <li><a href="../employees/emp_crud.php">Employees</a></li>
     <li><a class="active" href="../types/typ_crud.php">Types</a></li>
 </ul>
 <h1>Types</h1>
@@ -72,23 +73,20 @@ $doc_array = $doc_database->selectUnusedSpec();
     </div>
     <br>
     <div>
-        <label for="new_kv2">KV2:</label>
+        <label for="new_kv2" class="label">KV2:</label>
         <input id="new_kv2" name="kv2" type="text" maxlength="12">
     </div>
-    <br>
     <div>
-        <label for="new_supplier">Supplier:</label>
+        <label for="new_supplier" class="label">Supplier:</label>
         <input id="new_supplier" name="supplier" type="text" maxlength="60">
     </div>
-    <br>
     <div>
-        <label for="new_cost">Cost:</label>
+        <label for="new_cost" class="label">Cost:</label>
         <input id="new_cost" name="cost" type="number" min="0">
     </div>
-    <br>
     <div>
-        <button type="submit">
-            Add Type
+        <button type="submit" class="button-submit">
+            Add
         </button>
     </div>
 </form>
@@ -97,18 +95,15 @@ $doc_array = $doc_database->selectUnusedSpec();
 
 <!-- Delete Person -->
 <h2>Delete Type: </h2>
-<form method="post" action="emp_delete.php">
+<form method="post" action="typ_delete.php">
     <!-- ID textbox -->
     <div>
-        <label for="emp_guid">ID:</label>
-        <input id="emp_guid" name="empid" type="number" min="0">
+        <label for="typ_guid" class="label">ID:</label>
+        <input id="typ_guid" name="typeid" type="number" min="0">
     </div>
-    <br>
-
-    <!-- Submit button -->
     <div>
-        <button type="submit">
-            Delete Tyoe
+        <button type="submit" class="button-submit">
+            Delete
         </button>
     </div>
 </form>
@@ -116,49 +111,39 @@ $doc_array = $doc_database->selectUnusedSpec();
 <hr>
 
 <!-- Search form -->
-<h2>Tyoes Search:</h2>
+<h2>Types Search:</h2>
 <form method="get">
     <!-- GUID textbox:-->
     <div>
-        <label for="guid_inp">ID:</label>
+        <label for="guid_inp" class="label">ID:</label>
         <input id="guid_inp" name="guid" type="number" value='<?php echo $guid; ?>' min="0">
     </div>
-    <br>
-
     <div>
-        <label for="spec_inp">Specification ID:</label>
+        <label for="spec_inp" class="label">Specification ID:</label>
         <input id="spec_inp" name="spec" type="number" value='<?php echo $guid; ?>' min="0">
     </div>
-    <br>
     <div>
-        <label for="az6_inp">AZ6:</label>
+        <label for="az6_inp" class="label">AZ6:</label>
         <input id="az6_inp" name="az6" type="text"
                value='<?php echo $az6; ?>' maxlength="12">
     </div>
-    <br>
-    <!-- Surname textbox:-->
     <div>
-        <label for="kv2_inp">KV2:</label>
+        <label for="kv2_inp" class="label">KV2:</label>
         <input id="kv2_inp" name="kv2" type="text"
                value='<?php echo $kv2; ?>' maxlength="12">
     </div>
-    <br>
     <div>
-        <label for="supplier_inp">Supplier:</label>
+        <label for="supplier_inp" class="label">Supplier:</label>
         <input id="supplier_inp" name="supplier" type="text"
                value='<?php echo $supplier; ?>' maxlength="60">
     </div>
-    <br>
     <div>
-        <label for="cost_inp">Cost:</label>
+        <label for="cost_inp" class="label">Cost:</label>
         <input id="cost_inp" name="cost" type="number"
                value='<?php echo $type_cost; ?>' min="0">
     </div>
-    <br>
-
-    <!-- Submit button -->
     <div>
-        <button id='submit' type='submit'>
+        <button id='submit' type='submit' class="button-submit">
             Search
         </button>
     </div>
@@ -176,6 +161,7 @@ $doc_array = $doc_database->selectUnusedSpec();
         <th>KV2</th>
         <th>Supplier</th>
         <th>Cost</th>
+        <th>Delete</th>
     </tr>
     <?php foreach ($type_array as $type) : ?>
         <tr>
@@ -185,6 +171,14 @@ $doc_array = $doc_database->selectUnusedSpec();
             <td><?php echo $type['KV2']; ?>  </td>
             <td><?php echo $type['SUPPLIER']; ?>  </td>
             <td><?php echo $type['TYPE_COST']; ?>  </td>
+            <td>
+                <form method="post" action="typ_delete.php">
+                        <input name="typeid" type="hidden" value="<?php echo $type['GUID']; ?>">
+                        <button type="submit" id="button-list">
+                            <img src="../static/imgs/trashcan.png" alt="Del" width="20">
+                        </button>
+                </form>
+            </td>
         </tr>
     <?php endforeach; ?>
 </table>

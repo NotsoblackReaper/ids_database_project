@@ -22,3 +22,5 @@ SELECT * FROM documents WHERE guid LIKE '%622326'
 SELECT * FROM documents order by guid desc;
 
 select types.guid,types.specification_id,documents.a6z,types.kv2,types.supplier,types.type_cost from types inner join documents on types.specification_id= documents.guid;
+
+select documents.guid,documents.az6,documents.az6,types.guid as typeid from documents left join types on documents.guid=types.specification_id;

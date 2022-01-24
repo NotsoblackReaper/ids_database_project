@@ -72,14 +72,14 @@ class TypesDatabaseHelper
         return $success;
     }
 
-    public function deleteEmployee($employee_id)
+    public function deleteType($type_id)
     {
         $errorcode = 0;
-        $sql = 'BEGIN p_delete_employee(:employeeid, :errorcode); END;';
+        $sql = 'BEGIN p_delete_type(:typeid, :errorcode); END;';
         $statement = oci_parse($this->conn, $sql);
 
         //  Bind the parameters
-        oci_bind_by_name($statement, ':employeeid', $employee_id);
+        oci_bind_by_name($statement, ':typeid', $type_id);
         oci_bind_by_name($statement, ':errorcode', $errorcode);
         oci_execute($statement);
 
