@@ -1,26 +1,34 @@
-select * from documents  where a6z like 'A6Z1%';
-delete from documents;
-delete from employees;
-delete from types;
+insert into COMPONENTS (SERIAL_NR,PARENT_NR, TYPE_ID, SHIPPING_DATE, INSTALLATION_DATE) values (20000,null,3,'25-Jan-22','25-Jan-22');
 
-select * from types ;
-select count(*) from (select specification_id from types group by specification_id);
-select count(*) from documents where az6 like 'AZ61%';
+delete from components where serial_nr in(select * from (select serial_nr from components order by serial_nr desc) where rownum<2);
+insert into COMPONENTS (SERIAL_NR, PARENT_NR, TYPE_ID, SHIPPING_DATE, INSTALLATION_DATE) values (4826,1,1,'25-Jan-22',null);
+select * from components order by serial_nr desc;
 
-select documents.guid,documents.az6 from documents left join types on documents.guid=types.specification_id where types.guid is null and documents.az6 like 'AZ61%';
+select * from components where serial_nr+1 not in (select serial_nr from components);
 
-select count(*) from (select documents.guid,documents.az6 from documents left join types on documents.guid=types.specification_id where types.guid is null and documents.az6 like 'AZ61%');
+select serial_nr from (SELECT serial_nr FROM components ORDER BY dbms_random.value );
 
-insert into types(specification_id,kv2,supplier,type_cost) values (5001,'KV2000000001','Kenco Logistic Services LLC',50.99);
-select * from documents where az6 like 'AZ61%';
-select * from documents  where guid < 6000;
+drop procedure p_delete_person;
 
-SELECT * FROM documents WHERE guid LIKE '%622326'
-              AND upper(a6z) LIKE upper('%a6z1000%')
-              AND upper(document_url) LIKE upper('%2325%');
-              
-SELECT * FROM documents order by guid desc;
+select sum(types.type_cost) from incidents 
+join affects on incidents.guid = affects.guid 
+join components on components.serial_nr = affects.serial_nr 
+join types on components.type_id=types.guid where incidents.guid=1;
 
-select types.guid,types.specification_id,documents.a6z,types.kv2,types.supplier,types.type_cost from types inner join documents on types.specification_id= documents.guid;
+select incidents.guid, sum(types.type_cost) from incidents 
+left join affects on incidents.guid = affects.guid 
+join components on components.serial_nr = affects.serial_nr 
+join types on components.type_id=types.guid 
+group by incidents.guid;
 
-select documents.guid,documents.az6,documents.az6,types.guid as typeid from documents left join types on documents.guid=types.specification_id;
+select avg(cost) from 
+(select sum(types.type_cost) as cost from incidents 
+left join affects on incidents.guid = affects.guid 
+join components on components.serial_nr = affects.serial_nr 
+join types on components.type_id=types.guid 
+group by incidents.guid);
+
+select components.serial_nr,components.parent_nr, types.kv2,components.shipping_date,components.installation_date,types.type_cost from affects 
+join components on components.serial_nr = affects.serial_nr
+join types on components.type_id=types.guid
+where affects.guid=1;

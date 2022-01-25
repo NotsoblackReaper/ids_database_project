@@ -22,7 +22,8 @@ if (isset($_GET['document_url'])) {
 }
 
 //Fetch data from database
-$document_array = $database->selectAllDocuments($guid, $az6, $document_url);
+$document_array = $database->selectAllDocuments($guid, $az6, $document_url,50);
+$document_count = $database->countAllDocuments($guid, $az6, $document_url);
 ?>
 
 <html>
@@ -38,6 +39,8 @@ $document_array = $database->selectAllDocuments($guid, $az6, $document_url);
     <li><a class="active" href="../documents/doc_crud.php">Documents</a></li>
     <li><a href="../employees/emp_crud.php">Employees</a></li>
     <li><a href="../types/typ_crud.php">Types</a></li>
+    <li><a href="../components/comp_crud.php">Components</a></li>
+    <li><a href="../incidents/inc_crud.php">Incidents</a></li>
 </ul>
 <h1>Documents</h1>
 
@@ -107,6 +110,7 @@ $document_array = $database->selectAllDocuments($guid, $az6, $document_url);
 
 <!-- Search result -->
 <h2>Documents Search Result:</h2>
+<h3>(Found <?php echo $document_count[0]; ?>, showing <?php echo min($document_count[0], 50)?>) </h3>
 <table>
     <tr>
         <th>GUID</th>
@@ -121,7 +125,7 @@ $document_array = $database->selectAllDocuments($guid, $az6, $document_url);
             <td><?php echo $document['DOCUMENT_URL']; ?>  </td>
             <td><form method="post" action="doc_delete.php">
                     <input name="id" type="hidden" value="<?php echo $document['GUID']; ?>">
-                    <button id="button-list" type="submit" <?php if ($document['TYPEID'] != ''){ ?> disabled <?php   } ?>>
+                    <button id="button-list" type="submit" <?php if ($document['TYPEID'] != ''){ ?> disabled <?php } ?>>
                         <img src="../static/imgs/trashcan.png" alt="Del" width="20">
                     </button>
                 </form>

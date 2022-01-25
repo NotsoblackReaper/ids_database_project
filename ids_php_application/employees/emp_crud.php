@@ -27,7 +27,8 @@ if (isset($_GET['email'])) {
 }
 
 //Fetch data from database
-$employee_array = $database->selectAllEmployees($employee_id, $firstname,$surname, $email);
+$employee_array = $database->selectAllEmployees($employee_id, $firstname,$surname, $email,50);
+$employee_count = $database->countAllEmployees($employee_id, $firstname,$surname, $email);
 ?>
 
 <html>
@@ -43,6 +44,8 @@ $employee_array = $database->selectAllEmployees($employee_id, $firstname,$surnam
     <li><a href="../documents/doc_crud.php">Documents</a></li>
     <li><a class="active" href="../employees/emp_crud.php">Employees</a></li>
     <li><a href="../types/typ_crud.php">Types</a></li>
+    <li><a href="../components/comp_crud.php">Components</a></li>
+    <li><a href="../incidents/inc_crud.php">Incidents</a></li>
 </ul>
 <h1>Employees</h1>
 
@@ -119,6 +122,7 @@ $employee_array = $database->selectAllEmployees($employee_id, $firstname,$surnam
 
 <!-- Search result -->
 <h2>Employees Search Result:</h2>
+<h3>(Found <?php echo $employee_count[0]; ?>, showing <?php echo min($employee_count[0], 50)?>) </h3>
 <table>
     <tr>
         <th>ID</th>
@@ -134,7 +138,7 @@ $employee_array = $database->selectAllEmployees($employee_id, $firstname,$surnam
             <td><?php echo $employee['SURNAME']; ?>  </td>
             <td><?php echo $employee['EMAIL']; ?>  </td>
             <td>
-                <form method="post" action="emp_delete.php">
+                <form method="post" action="emp_update.php">
                     <input name="empid" type="hidden" value="<?php echo $employee['EMPLOYEEID']?>">
                     <button type="submit" id="button-list">
                         <img src="../static/imgs/feather.png" alt="Edit" width="20">

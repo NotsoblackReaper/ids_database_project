@@ -40,13 +40,33 @@ class DocumentsDatabaseHelper
         oci_close($this->conn);
     }
 
-    public function selectAllDocuments($guid, $az6, $document_url)
+    public function countAllDocuments($guid, $az6, $document_url)
+    {
+        $sql = "SELECT count(*) as count from documents 
+            WHERE documents.guid LIKE '%{$guid}%'
+              AND upper(documents.az6) LIKE upper('%{$az6}%')
+              AND upper(documents.document_url) LIKE upper('%{$document_url}%')";
+
+        $statement = oci_parse($this->conn, $sql);
+
+        oci_execute($statement);
+
+        $res=oci_fetch_row($statement);
+
+        oci_free_statement($statement);
+
+        return $res;
+    }
+
+    public function selectAllDocuments($guid, $az6, $document_url,$limit)
     {
         $sql = "SELECT documents.guid,documents.az6,documents.document_url,types.guid as typeid from documents 
             left join types on documents.guid=types.specification_id
             WHERE documents.guid LIKE '%{$guid}%'
               AND upper(documents.az6) LIKE upper('%{$az6}%')
               AND upper(documents.document_url) LIKE upper('%{$document_url}%')";
+        if($limit!='')
+            $sql.="AND ROWNUM<=50";
 
         $statement = oci_parse($this->conn, $sql);
 

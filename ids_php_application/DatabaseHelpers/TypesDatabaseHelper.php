@@ -40,7 +40,27 @@ class TypesDatabaseHelper
         oci_close($this->conn);
     }
 
-    public function selectAllTypes($guid, $spec_id,$az6, $kv2, $supplier, $type_cost)
+    public function countAllTypes($guid, $spec_id,$az6, $kv2, $supplier, $type_cost)
+    {
+        $sql = "SELECT count(*) FROM types inner join documents on types.specification_id= documents.guid
+            WHERE types.guid LIKE '%{$guid}%'
+              AND types.specification_id LIKE '%{$spec_id}%'
+              AND upper(documents.az6) LIKE upper('%{$az6}%')
+              AND upper(types.kv2) LIKE upper('%{$kv2}%')
+              AND upper(types.supplier) LIKE upper('%{$supplier}%')
+              AND types.type_cost LIKE '%{$type_cost}%'";
+
+        $statement = oci_parse($this->conn, $sql);
+
+        oci_execute($statement);
+        $res=oci_fetch_row($statement);
+
+        oci_free_statement($statement);
+
+        return $res;
+    }
+
+    public function selectAllTypes($guid, $spec_id,$az6, $kv2, $supplier, $type_cost,$limit)
     {
         $sql = "SELECT types.guid,types.specification_id,documents.az6,types.kv2,types.supplier,types.type_cost FROM types inner join documents on types.specification_id= documents.guid
             WHERE types.guid LIKE '%{$guid}%'
@@ -49,6 +69,8 @@ class TypesDatabaseHelper
               AND upper(types.kv2) LIKE upper('%{$kv2}%')
               AND upper(types.supplier) LIKE upper('%{$supplier}%')
               AND types.type_cost LIKE '%{$type_cost}%'";
+        if($limit!='')
+            $sql.="AND ROWNUM<=50";
 
         $statement = oci_parse($this->conn, $sql);
 

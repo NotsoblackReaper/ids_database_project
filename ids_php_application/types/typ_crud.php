@@ -36,7 +36,8 @@ if (isset($_GET['type_cost'])) {
     $type_cost = $_GET['type_cost'];
 }
 //Fetch data from database
-$type_array = $database->selectAllTypes($guid, $spec_id,$az6, $kv2, $supplier, $type_cost);
+$type_array = $database->selectAllTypes($guid, $spec_id,$az6, $kv2, $supplier, $type_cost,50);
+$type_count = $database->countAllTypes($guid, $spec_id,$az6, $kv2, $supplier, $type_cost);
 $doc_array = $doc_database->selectUnusedSpec();
 ?>
 
@@ -53,6 +54,8 @@ $doc_array = $doc_database->selectUnusedSpec();
     <li><a href="../documents/doc_crud.php">Documents</a></li>
     <li><a href="../employees/emp_crud.php">Employees</a></li>
     <li><a class="active" href="../types/typ_crud.php">Types</a></li>
+    <li><a href="../components/comp_crud.php">Components</a></li>
+    <li><a href="../incidents/inc_crud.php">Incidents</a></li>
 </ul>
 <h1>Types</h1>
 
@@ -150,9 +153,9 @@ $doc_array = $doc_database->selectUnusedSpec();
 </form>
 <br>
 <hr>
-
 <!-- Search result -->
 <h2>Types Search Result:</h2>
+<h3>(Found <?php echo $type_count[0]; ?>, showing <?php echo min($type_count[0], 50)?>) </h3>
 <table>
     <tr>
         <th>ID</th>

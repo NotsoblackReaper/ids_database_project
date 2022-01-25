@@ -40,13 +40,34 @@ class EmployeesDatabaseHelper
         oci_close($this->conn);
     }
 
-    public function selectAllEmployees($employee_id,  $firstname,$surname, $email)
+    public function countAllEmployees($employee_id,  $firstname,$surname, $email)
+    {
+        $sql = "SELECT count(*) FROM employees
+            WHERE employeeid LIKE '%{$employee_id}%'
+              AND upper(firstname) LIKE upper('%{$firstname}%')
+              AND upper(surname) LIKE upper('%{$surname}%')
+              AND upper(email) LIKE upper('%{$email}%')";
+
+        $statement = oci_parse($this->conn, $sql);
+
+        oci_execute($statement);
+
+        $res=oci_fetch_row($statement);
+
+        oci_free_statement($statement);
+
+        return $res;
+    }
+
+    public function selectAllEmployees($employee_id,  $firstname,$surname, $email,$limit)
     {
         $sql = "SELECT * FROM employees
             WHERE employeeid LIKE '%{$employee_id}%'
               AND upper(firstname) LIKE upper('%{$firstname}%')
               AND upper(surname) LIKE upper('%{$surname}%')
               AND upper(email) LIKE upper('%{$email}%')";
+        if($limit!='')
+            $sql.="AND ROWNUM<=50";
 
         $statement = oci_parse($this->conn, $sql);
 
@@ -59,12 +80,39 @@ class EmployeesDatabaseHelper
         return $res;
     }
 
+    public function selectOneEmploye($employee_id)
+    {
+        $sql = "SELECT * FROM employees
+            WHERE employeeid LIKE '{$employee_id}'";
+
+        $statement = oci_parse($this->conn, $sql);
+
+        oci_execute($statement);
+
+        oci_fetch_all($statement, $res, null, null, OCI_FETCHSTATEMENT_BY_ROW);
+
+        oci_free_statement($statement);
+
+        return $res;
+    }
+
+    public function updateEmployee($empid,$firstname,$surname, $email){
+        var_dump($empid);
+        var_dump($firstname);
+        $sql = "update employees set firstname='{$firstname}',surname='{$surname}',email='{$email}' where employeeid like '{$empid}'";
+
+        $statement = oci_parse($this->conn, $sql);
+        $success = oci_execute($statement);
+        oci_free_statement($statement);
+        return $success;
+    }
+
     public function insertIntoEmployees($firstname,$surname, $email)
     {
         $sql = "INSERT INTO EMPLOYEES (FIRSTNAME,SURNAME, EMAIL) VALUES ('{$firstname}','{$surname}', '{$email}')";
 
         $statement = oci_parse($this->conn, $sql);
-        $success = oci_execute($statement) && oci_commit($this->conn);
+        $success = oci_execute($statement);
         oci_free_statement($statement);
         return $success;
     }
