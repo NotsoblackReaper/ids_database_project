@@ -1,0 +1,45 @@
+form div label{
+    width: 200px;
+}
+#button-list {
+    background-color: #ccc;
+    border-radius:6px;
+    text-decoration: none;
+    cursor: pointer;
+    border:none;
+    width: 30px;
+    height: 30px;
+}
+
+#button-list:disabled {
+    background-color: #f3f3f3;
+    border-radius:6px;
+    text-decoration: none;
+    cursor: pointer;
+    border:none;
+    width: 30px;
+    height: 30px;
+}
+
+.button-submit {
+    background-color: #ccc;
+    border-radius:6px;
+    text-decoration: none;
+    cursor: pointer;
+    border:none;
+    font-size: 18px;
+    text-align: center;
+    width: 100px;
+    height: 30px;
+}
+
+#button-list .delete{
+    background: url(../imgs/trashcan.png) no-repeat;
+    border: black 1px;
+}
+
+.label{
+    display: inline-block;
+    width: 150px;
+    height: 40px;
+}

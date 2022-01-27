@@ -1,0 +1,10 @@
+Deployment der Anwendung
+1. Datenbank erstellen:
+	Ausführen der Skipte create.sql und create_procedures.sql
+2. Datenbank befüllen:
+	Ausführen der Main-Methode der Java Anwendung,
+	dadurch werden Daten generiert und in die Datenbank Geschrieben.
+3. Php Anwendung auf Almighty Deployen
+	Inhalt des Unterordners "sources/php" auf Almigthy in das verzeichnis "public_html" oder gewünschten unterordner kopieren.
+3. Anwendung Erreichbar
+	Applikation sollte jetzt über "https://wwwlab.cs.univie.ac.at/~[uspace-name]/[unterordner]/index.php" erreichbar sein.
